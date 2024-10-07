@@ -1567,7 +1567,7 @@ services:
         ports:
           - 3306:3306
         volumes:
-            - ${PWD}/database:/var/lib/mysql
+            - ${PWD}/database:/bitnami/mariadb/data
             - ${PWD}/schema.sql:/docker-entrypoint-initdb.d/init.sql
         environment:
           MARIADB_ROOT_PASSWORD: New1234!
