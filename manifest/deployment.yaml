@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+#      securityContext:
+#        privileged: true
+      containers:
+        - image: mariadb
+          name: mariadb
+          securityContext:
+            runAsUser: 1000
+  #          privileged: true
+  #          capabilities:
+  #            add: ["SYS_ADMIN"]
+          envFrom:
+            - secretRef:
+                name: mariadb-bdg
+          ports:
+            - containerPort: 3306
+              name: mariadb
+          volumeMounts:
+            - name: mariadb-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mariadb-persistent-storage
+          persistentVolumeClaim:
+            claimName: mariadb-pv-claim2
